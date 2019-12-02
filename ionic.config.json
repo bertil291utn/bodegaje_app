@@ -1,5 +1,7 @@
 {
   "name": "bodegaje",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

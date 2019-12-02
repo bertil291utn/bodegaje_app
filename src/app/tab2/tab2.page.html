@@ -1,9 +1,27 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab Two
+      Barcode Scanner
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content></ion-content>
+<ion-content padding>
+  <ion-button expand="full" (click)="scanCode()" color="secondary">
+    <ion-icon name="qr-scanner" slot="start"></ion-icon>Scan Code
+  </ion-button>
+
+  <ion-card *ngIf="scannedCode">
+    <ion-card-content>
+      Result from Scan: {{ scannedCode }}
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="createdCode">
+    <!-- <ngx-qrcode [(qrc-value)]="createdCode"></ngx-qrcode> -->
+    <ion-card-content>
+      <p>Value: {{ createdCode }}</p>
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

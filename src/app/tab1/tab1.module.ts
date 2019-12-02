@@ -13,5 +13,6 @@ import { Tab1Page } from './tab1.page';
     RouterModule.forChild([{ path: '', component: Tab1Page }])
   ],
   declarations: [Tab1Page]
+  // ,  providers:[BarcodeScanner]
 })
 export class Tab1PageModule {}
