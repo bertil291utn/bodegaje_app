@@ -1,19 +1,89 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      QR Code Creater
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      Gesti&oacute;n de bodega
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-button expand="full" (click)="scanCode()" color="secondary">
-    <ion-icon name="qr-scanner" slot="start"></ion-icon>Scan Code
-  </ion-button>
+<ion-content class="ion-padding" color="medium">
 
-  <ion-card *ngIf="scannedCode">
+  <ion-grid style="margin-bottom: 5%;">
+    <ion-row>
+      <ion-col>
+        <ion-text color="primary"><strong>Usuario: </strong>Supervisor/a</ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-text color="primary"><strong># Transacci&oacute;n: </strong>000001</ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-text color="primary"><strong>Fecha: </strong>{{nowDate|date:'dd-MMM-yyyy HH:mm:ss'}}</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+
+  <form [formGroup]="transaccionForm">
+    <section>
+      <header>Tipo transacci&oacute;n</header>
+      <ion-item>
+        <ion-label></ion-label>
+        <ion-select color="primary"  interface="popover" formControlName="tipo">
+          <ion-select-option *ngFor="let obj of tipo_transaccion_select" [value]="obj.id_tipo_tran_bod">
+            {{obj.nombre}}</ion-select-option>
+          <!-- <ion-select-option value="1" selected>1</ion-select-option> -->
+        </ion-select>
+      </ion-item>
+    </section>
+    <section>
+      <header>Concepto</header>
+      <ion-item lines="none">
+        <ion-textarea formControlName="concepto" color="primary" style="text-transform: uppercase;" onKeyUp="this.value=this.value.toUpperCase();">
+        </ion-textarea>
+      </ion-item>
+    </section>
+  </form>
+  <ion-card color="light">
+    <ion-card-header>
+      <!-- <ion-label style="font-size: 1.2rem;font-weight: bold;"> Variedades </ion-label>
+        <ion-button float-right color="danger" fill="outline" (click)="scanCode()">
+          <ion-icon name="add-circle-outline"></ion-icon> -->
+      <ion-button expand="block" shape="round" color="danger" fill="outline" (click)="returnScanedValue()">
+        <!-- <ion-icon name="add-circle-outline" slot="start"></ion-icon>  -->
+        a&ntilde;adir variedad
+      </ion-button>
+    </ion-card-header>
+
     <ion-card-content>
-      Result from Scan: {{ scannedCode }}
+      <ion-grid>
+        <ion-row text-center class="table_header">
+          <ion-col>C&oacute;digo</ion-col>
+          <ion-col>Cant.</ion-col>
+          <ion-col>Variedad</ion-col>
+          <ion-col>Tama&ntilde;o</ion-col>
+          <ion-col>Eliminar</ion-col>
+        </ion-row>
+        <ion-row text-center *ngFor="let item of prod_bodega_array">
+          <ion-col>{{item.codigo}}</ion-col>
+          <ion-col>{{item.cantidad}}</ion-col>
+          <ion-col>{{item.variedad|titlecase}}</ion-col>
+          <ion-col>{{item.tamano|lowercase}}</ion-col>
+          <ion-col>
+            <ion-icon name="trash" style="font-size: 1.6rem;" color="primary" (click)="deleteVar(item.cantidad,item.codigo)"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-card-content>
+
+    <ion-button *ngIf="prod_bodega_array.length>0" expand="block" color="danger">
+      guardar
+    </ion-button>
   </ion-card>
+
+
 </ion-content>

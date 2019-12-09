@@ -7,7 +7,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-button expand="full" (click)="scanCode()" color="secondary">
+  <!-- <ion-button expand="full" (click)="scanCode()" color="secondary">
     <ion-icon name="qr-scanner" slot="start"></ion-icon>Scan Code
   </ion-button>
 
@@ -18,10 +18,10 @@
   </ion-card>
 
   <ion-card *ngIf="createdCode">
-    <!-- <ngx-qrcode [(qrc-value)]="createdCode"></ngx-qrcode> -->
+    <ngx-qrcode [(qrc-value)]="createdCode"></ngx-qrcode>
     <ion-card-content>
       <p>Value: {{ createdCode }}</p>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 
 </ion-content>
