@@ -1,27 +1,63 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Barcode Scanner
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      Pedidos
     </ion-title>
+    <ion-buttons slot="end" style="margin-right: 2%;">
+      <ion-button (click)="refreshData()">
+        <ion-icon slot="icon-only" name="refresh" style="font-size: 1.8em;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <!-- <ion-button expand="full" (click)="scanCode()" color="secondary">
-    <ion-icon name="qr-scanner" slot="start"></ion-icon>Scan Code
-  </ion-button>
+<ion-content padding color="medium">
 
-  <ion-card *ngIf="scannedCode">
-    <ion-card-content>
-      Result from Scan: {{ scannedCode }}
-    </ion-card-content>
-  </ion-card>
+  <section *ngFor="let pedido of array_pedidos">
+    <header>Pedido # {{pedido.nopedido}}</header>
+    <!-- <ion-item-sliding> -->
+    <ion-item lines="none" (click)="showFaltantes(pedido.nopedido)">
+      <ion-grid>
+        <ion-row text-center>
+          <ion-col>
+            <ion-chip color="danger" *ngIf="!enviado">
+              <ion-label color="danger">No se puede enviar todav&iacute;a</ion-label>
+            </ion-chip>
+            <ion-chip color="success" *ngIf="enviado">
+              <ion-label color="success">Listo para env&iacute;o</ion-label>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+        <ion-row text-center class="table_header">
+          <ion-col>Cant.</ion-col>
+          <ion-col>Variedad</ion-col>
+          <ion-col>Tama&ntilde;o</ion-col>
+        </ion-row>
+        <ion-row text-center *ngFor="let item of pedido.variedades">
+          <ion-col>{{item.cantidad}}</ion-col>
+          <ion-col>{{item.producto}}</ion-col>
+          <ion-col>{{item.tamano}}</ion-col>
+        </ion-row>
+      </ion-grid>
 
-  <ion-card *ngIf="createdCode">
-    <ngx-qrcode [(qrc-value)]="createdCode"></ngx-qrcode>
-    <ion-card-content>
-      <p>Value: {{ createdCode }}</p>
-    </ion-card-content>
-  </ion-card> -->
+    </ion-item>
+    <ion-button expand="block" color="primary" (click)="enviado=true" *ngIf="arrayFaltantesToAlert.length==0&&!enviado">
+      listo para env&iacute;o 
+      <!-- click enabled when faltantes ==0 from server http -->
+    </ion-button>
+
+    <!-- <ion-item-options>
+        <ion-item-option color="primary">
+          <ion-icon slot="top" name="more"></ion-icon>
+          Faltantes
+        </ion-item-option>
+        <ion-item-option color="secondary">
+          <ion-icon slot="top" name="archive"></ion-icon>
+          Archive
+        </ion-item-option>
+      </ion-item-options> -->
+
+    <!-- </ion-item-sliding> -->
+  </section>
 
 </ion-content>

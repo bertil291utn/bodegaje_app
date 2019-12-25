@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from '@ionic/angular';
+import { NavController, AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 import { ApirestService } from '../servicios/apirest.service';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
@@ -16,11 +16,14 @@ export class Tab1Page {
   scannedCode = null;
   nowDate = new Date();
   tipo_transaccion_select;//para elselect de tipo trnasacciones
-  tipo_transaccion = 1;
   prod_bodega_array = [];
+  loadingSaveTran;//loadign para guarda transacciones
+ 
 
-  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner,
-    public alertController: AlertController, private apirest: ApirestService, private fb: FormBuilder) {
+
+  constructor(public navCtrl: NavController, private barcodeScanner: BarcodeScanner, public loadingController: LoadingController,
+    public alertController: AlertController, private apirest: ApirestService, private fb: FormBuilder,
+    public toastController: ToastController) {
   }
 
   ngOnInit() {
@@ -28,18 +31,28 @@ export class Tab1Page {
   }
 
 
+
   private init_values() {
-    this.get_tipo_tran();
     this.form_set();
+    
   }
 
-  private form_set() {
+ 
+
+
+  private async form_set() {
     this.transaccionForm = this.fb.group({
       tipo: ['', Validators.required],
       concepto: ['', Validators.required],
       variedad: ['', Validators.required]
     });
-    this.transaccionForm.controls.tipo.setValue(1);//ingreso como primera opcion en tipo de transaccion 
+
+    await this.get_tipo_tran();//obtner el array de tipos de transacciones
+    //console.log('segundo ',this.tipo_transaccion_select);
+    let val_ingreso_diario = this.tipo_transaccion_select.find(element => element.id_tipo_tran_bod == 1);//seleccionar siempre el valor numero 1
+    this.transaccionForm.controls.tipo.setValue(val_ingreso_diario.id_tipo_tran_bod);//ingreso como primera opcion en tipo de transaccion 
+    this.transaccionForm.controls.concepto.setValue(val_ingreso_diario.nombre);
+
     // this.transaccionForm = new FormGroup({
     //   tipo: new FormControl('', Validators.required),
     //   concepto: new FormControl('', Validators.required)
@@ -47,14 +60,45 @@ export class Tab1Page {
     // });
   }
 
+
+  public async saveVariedad() {
+    //visualizar skeleton
+    this.loadingSaveTran = await this.loadingController.create({
+      message: 'Guardando...'
+    });
+    await this.loadingSaveTran.present();
+    this.transaccionForm.controls['variedad'].setValue(this.prod_bodega_array);
+    console.log(this.transaccionForm.value);
+    let respuesta = await this.apirest.save_encabezado_tran(this.transaccionForm.value).toPromise();
+
+    if (respuesta['status'] == 200)
+      this.transaccionForm.value.variedad.forEach(async (element, index) => {
+        let resp = await this.apirest.save_detalles_tran(respuesta['id_transaccion'], element).toPromise();
+        if (index == this.transaccionForm.value.variedad.length - 1) //ver que sea el ultimo valor el indice sea igual al size del aray -1
+          if (resp['status'] == 200) {
+            console.log('desvisualizar skeleton, mensaje insertado y reiniciar variables ');
+            this.loadingSaveTran.dismiss();
+            this.prod_bodega_array = [];
+            this.transaccionForm.reset();
+            let mensaje = 'Variedades ingresadas correctamente';
+            this.actionPresentToastBottom(mensaje, 4000);
+          }
+      });
+    //  this.transaccionForm.value;
+
+  }
+
   private async get_tipo_tran() {
     this.tipo_transaccion_select = await this.apirest.get_tipo_tran().toPromise();
     this.tipo_transaccion_select = this.tipo_transaccion_select.items;//seleccionar la opcion de items
-    console.log(this.tipo_transaccion_select);
+    console.log('primero ', this.tipo_transaccion_select);
   }
 
   private async scanCode() {
-    let scannedCode = await this.barcodeScanner.scan();
+    let options = {
+      showTorchButton: true
+    }
+    let scannedCode = await this.barcodeScanner.scan(options);
     console.log(scannedCode);
     return scannedCode['text'];
   }
@@ -70,6 +114,7 @@ export class Tab1Page {
     console.log('code_exists: ', code_exists);
     if (!code_exists) {
       let Objeto = {
+        id_prod_bodega: producto_bodega['id_prod_bodega'],
         codigo: producto_bodega['gs1_prod'],
         cantidad: 1,
         variedad: producto_bodega['variedad'],
@@ -138,5 +183,17 @@ export class Tab1Page {
   }
 
 
+  private async actionPresentToastBottom(mensaje: string, duration: number) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      position: 'bottom',
+      duration: duration
+    });
+    toast.present();
+  }
+
+  public getValueConcept(evento) {
+    this.transaccionForm.controls.concepto.setValue(this.tipo_transaccion_select.find(element => element.id_tipo_tran_bod == evento.detail.value).nombre);
+  }
 
 }//endtab1page

@@ -1,26 +1,85 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Generate QR Code
+  <ion-toolbar color="primary">
+    <ion-title class="ion-text-center">
+      Resumen del d&iacute;a
     </ion-title>
+    <ion-buttons slot="end" style="margin-right: 2%;">
+      <ion-button>
+        <ion-icon slot="icon-only" name="refresh" style="font-size: 1.8em;"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  
-  <!-- <ion-item>
-    <ion-input type="text" placeholder="MY QR Code data" [(ngModel)]="qrData">
-    </ion-input>
-  </ion-item>
+<ion-content padding color="medium">
+  <section>
+    <header>faltantes</header>
+    <ion-item lines="none">
+      <ion-grid>
+        <ion-row text-center class="table_header">
+          <ion-col>Variedad</ion-col>
+          <ion-col>Tama&ntilde;o</ion-col>
+          <ion-col>Cantidad</ion-col>
+        </ion-row>
+        <ion-row text-center>
+          <ion-col>312</ion-col>
+          <ion-col>2312</ion-col>
+          <ion-col>12321</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </section>
 
-  <ion-button expand="full" (click)="createCode()">
-    <ion-icon name="barcode" slot="start"></ion-icon>Create Code</ion-button>
-
-  <ion-card *ngIf="createdCode">
-    <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
-    <ion-card-content>
-      <p>Value: {{ createdCode }}</p>
-    </ion-card-content>
-  </ion-card> -->
+  <section>
+    <header>sobrantes</header>
+    <ion-item lines="none">
+      <ion-grid>
+        <ion-row text-center class="table_header">
+          <ion-col>Variedad</ion-col>
+          <ion-col>Tama&ntilde;o</ion-col>
+          <ion-col>Cantidad</ion-col>
+        </ion-row>
+        <ion-row text-center>
+          <ion-col>312</ion-col>
+          <ion-col>2312</ion-col>
+          <ion-col>12321</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </section>
+  <section>
+    <header>existentes</header>
+    <ion-item lines="none">
+      <ion-grid>
+        <ion-row text-center class="table_header">
+          <ion-col>Variedad</ion-col>
+          <ion-col>Tama&ntilde;o</ion-col>
+          <ion-col>Cantidad</ion-col>
+        </ion-row>
+        <ion-row text-center>
+          <ion-col>312</ion-col>
+          <ion-col>2312</ion-col>
+          <ion-col>12321</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </section>
+  <section>
+    <header>vendidos</header>
+    <ion-item lines="none">
+      <ion-grid>
+        <ion-row text-center class="table_header">
+          <ion-col>Variedad</ion-col>
+          <ion-col>Tama&ntilde;o</ion-col>
+          <ion-col>Cantidad</ion-col>
+        </ion-row>
+        <ion-row text-center>
+          <ion-col>312</ion-col>
+          <ion-col>2312</ion-col>
+          <ion-col>12321</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </section>
 
 </ion-content>
