@@ -1,1 +1,21 @@
+header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.25em;
+  text-transform: uppercase;
+  color: #021859;
+  margin-left: 5%;
+}
+section {
+  margin-top: 1em;
+  margin-bottom: 2.5em;
+}
 
+.table_header > ion-col {
+  font-weight: bold;
+}
+
+ion-icon {
+  font-size: 1.5rem;
+}

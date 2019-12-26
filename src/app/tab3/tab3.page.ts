@@ -17,9 +17,7 @@ export class Tab3Page {
 
   }
 
-  createCode() {
-    this.createdCode = this.qrData;
-  }
+  
 
 
 }//end tab3
